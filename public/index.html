@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>一人公司 · 千问驱动 — 阿里云千问大模型互动广告</title>
+  <meta name="description" content="专为内容创作者打造的AI生产力工具。阿里云千问大模型助力每个人成为超级个体，实现一人公司。">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+  <!-- 背景粒子动画层 -->
+  <canvas id="particleCanvas"></canvas>
+
+  <!-- 主容器 -->
+  <div class="app-container">
+    <!-- ===== 头部区域 ===== -->
+    <header class="header">
+      <div class="header-left">
+        <div class="brand">
+          <i class="fa-solid fa-cloud brand-icon"></i>
+          <span class="brand-text">阿里云 · 千问大模型</span>
+        </div>
+      </div>
+      <div class="header-center">
+        <div class="hero-tag">🎬 专为内容创作者 · 媒体人 · 超级个体</div>
+        <h1 class="main-slogan">
+          一人公司，<span class="highlight-brand">「千问」</span>驱动
+        </h1>
+        <p class="sub-slogan">你的全栈AI员工——脚本、运营、美工、视频，即刻上岗</p>
+      </div>
+      <div class="header-right">
+        <a href="https://www.aliyun.com/product/tongyi?utm_source=one_person_company&utm_medium=interactive_ad" target="_blank" rel="noopener" class="btn-cta btn-cta-header">
+          🚀 免费试用千问大模型
+        </a>
+      </div>
+    </header>
+
+    <!-- ===== 主体三栏布局 ===== -->
+    <main class="main-content">
+      <!-- 左侧：员工列表 -->
+      <aside class="employee-panel">
+        <div class="panel-title">
+          <i class="fa-solid fa-users"></i> AI 员工名录
+        </div>
+        <div class="panel-subtitle">为内容生产而生的AI岗位</div>
+        <div class="employee-list" id="employeeList">
+          <!-- 脚本千问 -->
+          <div class="employee-card active" data-role="copywriting" data-name="脚本千问" data-icon="fa-pen-fancy">
+            <div class="employee-avatar">
+              <i class="fa-solid fa-pen-fancy"></i>
+              <div class="avatar-glow"></div>
+            </div>
+            <div class="employee-info">
+              <div class="employee-name">脚本千问</div>
+              <div class="employee-title">文案 / 编剧</div>
+              <div class="employee-badge">✍️ 短视频脚本 · 广告文案</div>
+              <div class="employee-desc">擅长抖音脚本、品牌故事、口播文案创作</div>
+            </div>
+          </div>
+
+          <!-- 运营千问 -->
+          <div class="employee-card" data-role="operations" data-name="运营千问" data-icon="fa-chart-line">
+            <div class="employee-avatar">
+              <i class="fa-solid fa-chart-line"></i>
+              <div class="avatar-glow"></div>
+            </div>
+            <div class="employee-info">
+              <div class="employee-name">运营千问</div>
+              <div class="employee-title">数据分析 / 方案</div>
+              <div class="employee-badge">📊 账号起号 · 选题策略</div>
+              <div class="employee-desc">擅长小红书/抖音起号方案、封面标题建议</div>
+            </div>
+          </div>
+
+          <!-- 美工千问 -->
+          <div class="employee-card" data-role="art" data-name="美工千问" data-icon="fa-palette">
+            <div class="employee-avatar">
+              <i class="fa-solid fa-palette"></i>
+              <div class="avatar-glow"></div>
+            </div>
+            <div class="employee-info">
+              <div class="employee-name">美工千问</div>
+              <div class="employee-title">视觉设计</div>
+              <div class="employee-badge">🎨 海报设计 · AI 出图</div>
+              <div class="employee-desc">擅长课程海报、宣传图、社媒配图生成</div>
+            </div>
+          </div>
+
+          <!-- 视频千问（即将开放） -->
+          <div class="employee-card coming-soon" data-role="video" data-name="视频千问" data-icon="fa-video">
+            <div class="employee-avatar">
+              <i class="fa-solid fa-video"></i>
+              <div class="avatar-glow"></div>
+            </div>
+            <div class="employee-info">
+              <div class="employee-name">视频千问 <span class="badge-coming">即将开放</span></div>
+              <div class="employee-title">视频制作</div>
+              <div class="employee-badge">🎬 15秒短视频</div>
+              <div class="employee-desc">擅长短视频脚本到成片一站式生成</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 历史作品侧边栏 -->
+        <div class="history-section" id="historySection">
+          <div class="history-title" id="historyToggle">
+            <i class="fa-solid fa-clock-rotate-left"></i> 历史作品 <span class="history-count" id="historyCount">0</span>
+            <i class="fa-solid fa-chevron-down history-arrow"></i>
+          </div>
+          <div class="history-list" id="historyList" style="display:none;">
+            <div class="history-empty">暂无保存的作品</div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 中间：任务输入区 -->
+      <section class="task-panel">
+        <div class="panel-title">
+          <i class="fa-solid fa-terminal"></i> 任务派遣中心
+        </div>
+
+        <div class="task-form">
+          <!-- 当前选中的员工 -->
+          <div class="current-employee" id="currentEmployee">
+            <div class="ce-avatar">
+              <i class="fa-solid fa-pen-fancy"></i>
+            </div>
+            <div class="ce-info">
+              <span class="ce-name">脚本千问</span>
+              <span class="ce-status">待命中...</span>
+            </div>
+          </div>
+
+          <!-- 提示词输入 -->
+          <div class="prompt-area">
+            <label class="prompt-label">📝 给你的 AI 员工下达指令：</label>
+            <textarea
+              id="promptInput"
+              class="prompt-input"
+              rows="4"
+              placeholder="输入你的指令，让你的 AI 员工开始工作..."
+            >写一个30秒的抖音短视频脚本，推广一款降噪耳机，主题「沉浸自己的世界」。</textarea>
+            <div class="prompt-templates" id="promptTemplates">
+              <button class="template-btn active" data-template="抖音短视频脚本">🎬 抖音脚本</button>
+              <button class="template-btn" data-template="小红书起号方案">📱 起号方案</button>
+              <button class="template-btn" data-template="AI课程海报设计">🖼️ 课程海报</button>
+            </div>
+          </div>
+
+          <!-- 发送按钮 -->
+          <button class="btn-generate" id="btnGenerate" data-role="copywriting">
+            <i class="fa-solid fa-rocket"></i> 立刻干活
+          </button>
+        </div>
+
+        <!-- 公司创建器小彩蛋 -->
+        <div class="company-creator" id="companyCreator">
+          <div class="cc-toggle" id="ccToggle">
+            <i class="fa-solid fa-building"></i> 创建你的「一人公司」 <i class="fa-solid fa-chevron-down"></i>
+          </div>
+          <div class="cc-body" id="ccBody" style="display:none;">
+            <input type="text" class="cc-input" id="ccCompanyName" placeholder="你的账号/公司名称（如：大嘴美食探店）">
+            <input type="text" class="cc-input" id="ccIndustry" placeholder="内容赛道（如：美食测评）">
+            <button class="btn-generate small" id="btnCreateCompany">
+              <i class="fa-solid fa-magic-wand-sparkles"></i> 一键生成内容方案
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- 右侧：成果展示区 -->
+      <section class="result-panel">
+        <div class="panel-title">
+          <i class="fa-solid fa-star"></i> 成果展示区
+        </div>
+
+        <div class="result-content" id="resultContent">
+          <!-- 默认示例展示 -->
+          <div class="result-placeholder" id="resultPlaceholder">
+            <div class="result-placeholder-icon">
+              <i class="fa-solid fa-display"></i>
+            </div>
+            <h3>选择一位 AI 员工，开始你的内容创作之旅</h3>
+            <p>点击左侧员工头像，下达指令，实时查看 AI 生成结果</p>
+            <div class="demo-examples" id="demoExamples">
+              <!-- 启动时默认展示的预置示例 -->
+            </div>
+          </div>
+
+          <!-- 生成中动画 -->
+          <div class="result-loading" id="resultLoading" style="display:none;">
+            <div class="loading-employee" id="loadingEmployee">
+              <i class="fa-solid fa-pen-fancy"></i>
+            </div>
+            <div class="loading-text" id="loadingText">脚本千问正在构思...</div>
+            <div class="shimmer-card"></div>
+            <div class="shimmer-card short"></div>
+          </div>
+
+          <!-- 生成结果 -->
+          <div class="result-output" id="resultOutput" style="display:none;">
+            <div class="result-header">
+              <span class="result-employee" id="resultEmployeeName">脚本千问</span>
+              <button class="btn-copy" id="btnCopy" title="复制到剪贴板">
+                <i class="fa-solid fa-copy"></i> 复制
+              </button>
+              <button class="btn-download" id="btnDownload" title="下载图片" style="display:none;">
+                <i class="fa-solid fa-download"></i> 下载
+              </button>
+            </div>
+            <div class="result-body" id="resultBody"></div>
+            <div class="result-tag" id="resultTag"></div>
+            <div class="result-success">
+              <i class="fa-solid fa-circle-check"></i> 恭喜！你的「一人公司」刚刚完成了一个任务 🎉
+            </div>
+            <!-- 保存作品 -->
+            <div class="save-section">
+              <button class="btn-save" id="btnSave">
+                <i class="fa-solid fa-download"></i> 保存本次成果
+              </button>
+              <span class="save-hint">已保存至左侧「历史作品」（刷新页面可能丢失）</span>
+            </div>
+            <!-- 注册引导 -->
+            <div class="register-prompt">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              注册阿里云账号，永久保存你的创意库
+            </div>
+            <!-- 转化按钮 -->
+            <div class="cta-section">
+              <a href="https://www.aliyun.com/product/tongyi?utm_source=one_person_company&utm_medium=interactive_ad" target="_blank" rel="noopener" class="btn-cta btn-cta-result" id="btnCtaResult">
+                👨‍💼 立即创建你的「一人公司」 →
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===== 底部信息 ===== -->
+    <footer class="footer">
+      <div class="footer-left">
+        <span>广告 | 体验使用真实千问API生成，每人限制频率</span>
+      </div>
+      <div class="footer-center">
+        <span>🔒 不收集任何用户输入，输入内容仅用于本次生成</span>
+      </div>
+      <div class="footer-right">
+        <span class="footer-brand">Powered by 阿里云 · 千问大模型</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- 提示消息 Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
